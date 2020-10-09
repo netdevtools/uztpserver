@@ -7,10 +7,10 @@ class PnpMiddleware:
         # One-time configuration and initialization.
 
     def __call__(self, request):
-        if request.body.startswith(b'<pnp xmlns="urn:cisco:pnp"'):
-            request.pnp = ET.fromstring(request.body)
-            print(request.pnp)
-            print(request.headers)
+        #if request.body.startswith(b'<pnp xmlns="urn:cisco:pnp"'):
+        #    request.pnp = ET.fromstring(request.body)
+        #    print(ET.tostring(request.pnp))
+        #    print(request.headers)
         response = self.get_response(request)
 
         return response
