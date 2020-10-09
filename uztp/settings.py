@@ -25,7 +25,7 @@ SECRET_KEY = 'd+s)9=^0-b%3p=kurdw9rcjld_+*nradfzg^im+6plk46ur75#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'pnp',
 ]
 
 MIDDLEWARE = [
@@ -47,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'pnp.middleware.PnpMiddleware',
 ]
 
 ROOT_URLCONF = 'uztp.urls'
