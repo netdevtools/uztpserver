@@ -4,8 +4,8 @@ from django.http import HttpResponse
 
 
 xml_response = b'''
-<pnp xmlns="urn:cisco:pnp" version="1.0" udi="PID:CSR1000V,VID:V00,SN:9KW268VR0AG">
-  <request xmlns="urn:cisco:pnp:backoff" correlator="CiscoPnP-1.0-R29.90116-I1-P371-T1189547-2">
+<pnp xmlns="urn:cisco:pnp" version="1.0" udi="{{ udi }}">
+  <request xmlns="urn:cisco:pnp:backoff" correlator="{{ correlator }}">
    <backoff>
     <reason>backoffNow</reason>
     <callbackAfter>
@@ -17,8 +17,8 @@ xml_response = b'''
 '''
 
 xml_bye = b'''
-<pnp xmlns="urn:cisco:pnp" version="1.0" udi="PID:CSR1000V,VID:V00,SN:9KW268VR0AG">
-  <info xmlns="urn:cisco:pnp:work-info" correlator="CiscoPnP-1.0-R29.90116-I1-P371-T1189547-2">
+<pnp xmlns="urn:cisco:pnp" version="1.0" udi="{{ udi }}">
+  <info xmlns="urn:cisco:pnp:work-info" correlator="{{ correlator }}">
         <workInfo>
     <bye/>
    </workInfo>
@@ -28,9 +28,16 @@ xml_bye = b'''
 
 @csrf_exempt
 def work_request(request):
-    return HttpResponse(xml_response,  content_type="application/xml")
+    correlator = request.pnp[0].attrib.get("correlator").encode()
+    udi = request.pnp.attrib.get("udi").encode()
+    response = xml_response.replace(b"{{ udi }}", udi)
+    response = response.replace(b"{{ correlator }}", correlator)
+    return HttpResponse(response,  content_type="application/xml")
 
 @csrf_exempt
 def work_response(request):
-    print(request.body)
-    return HttpResponse(xml_bye)
+    correlator = request.pnp[0].attrib.get("correlator").encode()
+    udi = request.pnp.attrib.get("udi").encode()
+    response = xml_bye.replace(b"{{ udi }}", udi)
+    response = response.replace(b"{{ correlator }}", correlator)
+    return HttpResponse(response)
